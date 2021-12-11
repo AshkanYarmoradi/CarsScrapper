@@ -10,7 +10,7 @@ namespace CarsGather.Scraper
 {
     public class Scraper
     {
-        private readonly IWebDriver _driver;
+        private readonly ChromeDriver _driver;
         private const string _baseUrl = "https://www.cars.com/";
 
         public Scraper()
@@ -93,8 +93,10 @@ namespace CarsGather.Scraper
 
         public async Task<List<VehicleMinimalInfo>> GetVehiclesMinimalInfo()
         {
+            //Get vehicles card
             var vehicles = this._driver.FindElements(By.ClassName("vehicle-card"));
             
+            // Parse them to our Dto Object
             var vehiclesMinimalInfo = vehicles.Select(x => new VehicleMinimalInfo()
             {
                 Id = Guid.Parse(x.GetAttribute("Id")),
@@ -106,6 +108,59 @@ namespace CarsGather.Scraper
             }).ToList();
 
             return vehiclesMinimalInfo;
+        }
+
+        public async Task<VehicleFullInfo> GetVehicleFullInfo(VehicleMinimalInfo vehicle)
+        {
+            _driver.Navigate().GoToUrl($"https://www.cars.com/vehicledetail/{vehicle.Id}/");
+            
+            await _waitUntilElement(By.TagName("header"));
+
+            var vehicleFullInfo = new VehicleFullInfo()
+            {
+                Id = vehicle.Id,
+                Dealer = vehicle.Dealer,
+                Model = vehicle.Model,
+                Price = vehicle.Price,
+                Images = vehicle.Images,
+                UsedMiles = vehicle.UsedMiles,
+                Engine = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[7]")).Text,
+                Transmission = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[6]")).Text,
+                DriveTrain = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[3]")).Text,
+                ExteriorColor = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[1]")).Text,
+                FuelType = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[5]")).Text,
+                InteriorColor = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[2]")).Text,
+                MPG = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[4]/span/span/span")).Text,
+                Convenience = string.Join("\n",_driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[2]/dl/dd[1]/ul")).FindElements(By.TagName("li")).SelectMany(x=>x.Text))
+            };
+            
+            return vehicleFullInfo;
+        }
+
+        public async Task GoToNextPage()
+        {
+            _driver.FindElement(By.XPath("//*[@id=\"next_paginate\"]")).Click();
+
+            await _waitUntilElementDisappear(By.ClassName("loading"));
+        }
+
+        public void GetScreenshot(string imagePath)
+        {
+            ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(imagePath, ScreenshotImageFormat.Png);
+        }
+
+        public void GetFullScreenShot(string imagePath)
+        {
+            Dictionary<string, Object> metrics = new Dictionary<string, Object>();
+            metrics["width"] = _driver.ExecuteScript("return Math.max(window.innerWidth,document.body.scrollWidth,document.documentElement.scrollWidth)");
+            metrics["height"] = _driver.ExecuteScript("return Math.max(window.innerHeight,document.body.scrollHeight,document.documentElement.scrollHeight)");
+            metrics["deviceScaleFactor"] = _driver.ExecuteScript("return window.devicePixelRatio");
+            metrics["mobile"] = _driver.ExecuteScript("return typeof window.orientation !== 'undefined'");
+            _driver.ExecuteChromeCommand("Emulation.setDeviceMetricsOverride", metrics);
+
+            _driver.GetScreenshot().SaveAsFile(imagePath, ScreenshotImageFormat.Png);
+            
+            _driver.ExecuteChromeCommand("Emulation.clearDeviceMetricsOverride", new Dictionary<string, Object>());
         }
 
         private async Task _waitUntilUrl(string url, int checkingTime = 2, int pollingCount = 15)
@@ -133,6 +188,22 @@ namespace CarsGather.Scraper
                 catch (NoSuchElementException)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(checkingTime));
+                }
+            }
+        }
+        
+        private async Task _waitUntilElementDisappear(By by, int checkingTime = 2, int pollingCount = 15)
+        {
+            for (var i = 0; i < pollingCount; i++)
+            {
+                try
+                {
+                    _driver.FindElement(by);
+                    await Task.Delay(TimeSpan.FromSeconds(checkingTime));
+                }
+                catch (NoSuchElementException)
+                {
+                    break;
                 }
             }
         }
