@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarsGather.Scraper.Dtos;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
@@ -87,6 +89,23 @@ namespace CarsGather.Scraper
                 .Click();
             
             await _waitUntilElement(By.XPath("//*[@id=\"search-live-content\"]/header/span"));
+        }
+
+        public async Task<List<VehicleMinimalInfo>> GetVehiclesMinimalInfo()
+        {
+            var vehicles = this._driver.FindElements(By.ClassName("vehicle-card"));
+            
+            var vehiclesMinimalInfo = vehicles.Select(x => new VehicleMinimalInfo()
+            {
+                Id = Guid.Parse(x.GetAttribute("Id")),
+                Model = x.FindElement(By.TagName("h2")).Text,
+                UsedMiles = int.Parse(x.FindElement(By.ClassName("mileage")).Text.Replace(" mi.", string.Empty).Replace(",", string.Empty)),
+                Price = int.Parse(x.FindElement(By.ClassName("primary-price")).Text.Replace("$", string.Empty).Replace(",", string.Empty)),
+                Dealer = x.FindElement(By.ClassName("dealer-name")).FindElement(By.TagName("strong")).Text,
+                Images = x.FindElements(By.TagName("img")).Select(y=>y.GetAttribute("data-src")).ToList()
+            }).ToList();
+
+            return vehiclesMinimalInfo;
         }
 
         private async Task _waitUntilUrl(string url, int checkingTime = 2, int pollingCount = 15)

@@ -5,10 +5,15 @@
 	
 	
 	
+	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b168813b_002D26f8_002D4c63_002D94b0_002Df0932c3f6a5d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B28624E9-BEBD-49EE-A81C-0E0D46F48148::net5.0::CarsGather.Scraper.Test.UnitTest1.Test&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	
 	
 	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/SpawnedProcessesKnownList/=chromedriver_002Eexe/@EntryIndexedValue">DoNothing</s:String></wpf:ResourceDictionary>

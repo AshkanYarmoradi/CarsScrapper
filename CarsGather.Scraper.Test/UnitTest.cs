@@ -17,6 +17,8 @@ namespace CarsGather.Scraper.Test
             await scraper.Login();
 
             await scraper.InitializeSearching();
+
+            await scraper.GetVehiclesMinimalInfo();
         }
     }
 }
