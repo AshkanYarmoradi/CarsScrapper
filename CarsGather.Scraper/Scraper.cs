@@ -115,7 +115,7 @@ namespace CarsGather.Scraper
         {
             _driver.Navigate().GoToUrl($"https://www.cars.com/vehicledetail/{vehicle.Id}/");
             
-            await _waitUntilElement(By.TagName("header"));
+            await _waitUntilElement(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.basics-section > h2"));
             
             var vehicleFullInfo = new VehicleFullInfo()
             {
@@ -138,7 +138,7 @@ namespace CarsGather.Scraper
                 Safety =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(8) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(8) > ul > li")).Select(x=>x.Text)) : string.Empty,
                 Seating =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(10) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(10) > ul > li")).Select(x=>x.Text)) : string.Empty
             };
-
+            
             if (!_elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/section/header/div[3]/div[2]/span")))
             {
                 Console.WriteLine("Home Delivery Button not Found");
