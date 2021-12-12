@@ -75,6 +75,8 @@ namespace CarsGather.Sample
                     await JsonSerializer.SerializeAsync(fileStream, vehiclesMinimalInfo);
                     await fileStream.DisposeAsync();
                 }
+                
+                Console.WriteLine("Go For Specific Car Data");
 
                 var vehicleFull =
                     await scraper.GetVehicleFullInfo(vehiclesMinimalInfo.OrderBy(x => Guid.NewGuid()).First());
