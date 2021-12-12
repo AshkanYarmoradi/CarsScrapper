@@ -8,6 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{07BA4136-3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarsGather.Scraper.Test", "CarsGather.Scraper.Test\CarsGather.Scraper.Test.csproj", "{B28624E9-BEBD-49EE-A81C-0E0D46F48148}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{AFF015E5-A171-4318-ACD7-9F2044D3681D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarsGather.Sample", "CarsGather.Sample\CarsGather.Sample.csproj", "{0CF1B948-0C31-470C-B6BB-B9157C464C22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +20,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C5B2BD7F-9AA5-41E6-843D-50C4C7A6D8B0} = {EEF48FBB-976E-4B7D-9CCB-C433951DACEF}
 		{B28624E9-BEBD-49EE-A81C-0E0D46F48148} = {07BA4136-3FA7-4F50-ABFB-A1936C71337F}
+		{0CF1B948-0C31-470C-B6BB-B9157C464C22} = {AFF015E5-A171-4318-ACD7-9F2044D3681D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C5B2BD7F-9AA5-41E6-843D-50C4C7A6D8B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -26,5 +31,9 @@ Global
 		{B28624E9-BEBD-49EE-A81C-0E0D46F48148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B28624E9-BEBD-49EE-A81C-0E0D46F48148}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B28624E9-BEBD-49EE-A81C-0E0D46F48148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CF1B948-0C31-470C-B6BB-B9157C464C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CF1B948-0C31-470C-B6BB-B9157C464C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CF1B948-0C31-470C-B6BB-B9157C464C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CF1B948-0C31-470C-B6BB-B9157C464C22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

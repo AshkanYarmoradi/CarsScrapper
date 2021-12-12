@@ -53,7 +53,7 @@ namespace CarsGather.Scraper
             await _waitUntilElement(By.TagName("header"));
         }
 
-        public async Task InitializeSearching()
+        public async Task InitializeSearching(string model = "Model S")
         {
             // Select Used Cars
             var selectElement = _driver.FindElement(By.XPath("//*[@id=\"make-model-search-stocktype\"]"));
@@ -69,7 +69,7 @@ namespace CarsGather.Scraper
             // Select Model
             selectElement = _driver.FindElement(By.XPath("//*[@id=\"models\"]"));
             options = selectElement.FindElements(By.XPath("//option"));
-            options.First(x => x.Text == "Model S").Click();
+            options.First(x => x.Text == model).Click();
             
             // Select Price
             selectElement = _driver.FindElement(By.XPath("//*[@id=\"make-model-max-price\"]"));
@@ -125,31 +125,40 @@ namespace CarsGather.Scraper
                 Price = vehicle.Price,
                 Images = vehicle.Images,
                 UsedMiles = vehicle.UsedMiles,
-                Engine = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[7]")).Text,
-                Transmission = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[6]")).Text,
-                DriveTrain = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[3]")).Text,
-                ExteriorColor = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[1]")).Text,
-                FuelType = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[5]")).Text,
-                InteriorColor = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[2]")).Text,
-                MPG = _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[4]/span/span/span")).Text,
+                Engine = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[7]")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[7]")).Text : string.Empty,
+                Transmission = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[6]")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[6]")).Text: string.Empty,
+                DriveTrain = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[3]")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[3]")).Text : string.Empty,
+                ExteriorColor = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[1]")) ? _driver.FindElement(By.XPath(")//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[1]")).Text: string.Empty,
+                FuelType = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[5]")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[5]")).Text: string.Empty,
+                InteriorColor = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[2]")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[2]")).Text : string.Empty,
+                MPG = _elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[4]/span/span/span")) ? _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/div[2]/section[1]/dl/dd[4]/span/span/span")).Text : string.Empty,
                 Convenience = _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(2) > ul > li")) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(2) > ul > li")).Select(x=>x.Text)) : string.Empty,
                 Entertainment =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(4) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(4) > ul > li")).Select(x=>x.Text)) : string.Empty,
                 Exterior =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(6) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(6) > ul > li")).Select(x=>x.Text)) : string.Empty,
                 Safety =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(8) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(8) > ul > li")).Select(x=>x.Text)) : string.Empty,
                 Seating =  _elementIsExist(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(10) > ul > li"), true) ? string.Join("\n",_driver.FindElements(By.CssSelector("#ae-main-content > div.vdp-content-wrapper > div.basics-content-wrapper > section.sds-page-section.features-section > dl > dd:nth-child(10) > ul > li")).Select(x=>x.Text)) : string.Empty
             };
+
+            if (!_elementIsExist(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/section/header/div[3]/div[2]/span")))
+            {
+                Console.WriteLine("Home Delivery Button not Found");
+                return vehicleFullInfo;
+            }
             
             _driver.FindElement(By.XPath("//*[@id=\"ae-main-content\"]/div[5]/section/header/div[3]/div[2]/span")).Click();
 
             vehicleFullInfo.FairDeal =
-                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[1]/div/p")).Text;
+                _elementIsExist(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[1]/div/p")) ?
+                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[1]/div/p")).Text : string.Empty;
 
             vehicleFullInfo.HomeDelivery =
-                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[4]/div/p")).Text;
+                _elementIsExist(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[4]/div/p")) ? 
+                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[4]/div/p")).Text : string.Empty;
 
             vehicleFullInfo.VirtualAppointment =
-                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[5]/div/p")).Text;
-            
+                _elementIsExist(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[5]/div/p")) ?
+                _driver.FindElement(By.XPath("//*[@id=\"sds-modal\"]/div/div[2]/ul/li[5]/div/p")).Text : string.Empty;
+
             return vehicleFullInfo;
         }
 
