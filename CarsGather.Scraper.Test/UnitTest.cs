@@ -21,7 +21,7 @@ namespace CarsGather.Scraper.Test
 
             await scraper.InitializeSearching();
 
-            var vehiclesMinimalInfo = await scraper.GetVehiclesMinimalInfo();
+            var vehiclesMinimalInfo = scraper.GetVehiclesMinimalInfo();
             
             scraper.GetFullScreenShot(Path.GetTempFileName());
 
@@ -29,7 +29,7 @@ namespace CarsGather.Scraper.Test
             
             scraper.GetFullScreenShot(Path.GetTempFileName());
             
-            vehiclesMinimalInfo.AddRange(await scraper.GetVehiclesMinimalInfo());
+            vehiclesMinimalInfo.AddRange(scraper.GetVehiclesMinimalInfo());
 
             var vehicleFull =
                 await scraper.GetVehicleFullInfo(vehiclesMinimalInfo.OrderBy(x => Guid.NewGuid()).First());

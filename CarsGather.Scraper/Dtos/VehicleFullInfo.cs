@@ -25,5 +25,11 @@
         public string Safety { get; set; }
 
         public string Seating { get; set; }
+
+        public string FairDeal { get; set; }
+
+        public string HomeDelivery { get; set; }
+
+        public string VirtualAppointment { get; set; }
     }
 }
